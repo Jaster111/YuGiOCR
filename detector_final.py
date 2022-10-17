@@ -15,7 +15,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--image", help="path to image")
     parser.add_argument("--tesseract", help="path to tesseract.exe")
-    parser.add_argument("--visualize", help="show intermediate steps", action="store_true")
+    parser.add_argument("--visualize", help="boolean, visualize intermediate steps", action="store_true")
     args = parser.parse_args()
 
     if not os.path.exists(args.image) or not args.image.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')):
