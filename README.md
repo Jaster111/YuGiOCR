@@ -13,6 +13,9 @@ Examples in different lightning scenarios and positioning scenarios:
 
 ![Two cards - warm light](https://i.imgur.com/07CAMpR.png)
 
+***Uneven light***
+![Three cards - uneven light](https://i.imgur.com/UmMAgif.png)
+
 Detection fails mostly when the full card shape is somewhat occluded as you can see in the below example.
 
 ![Failure example](https://i.imgur.com/1eOyxxD.png)
