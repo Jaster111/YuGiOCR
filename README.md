@@ -54,7 +54,7 @@ Future Work:
 ------------
 * Improve 4-point contour detection mechanism
 * Optimize the code speed for real-time video usage (remove unnecessary contour detection, use a faster Tesseract wrapper)
-
+* Dynamic text box size so it doesn't go over the edge of the image
 
 Related GitHub Projects:
 ------------
