@@ -14,6 +14,7 @@ Examples in different lightning scenarios and positioning scenarios:
 ![Two cards - warm light](https://i.imgur.com/07CAMpR.png)
 
 ***Uneven light***
+
 ![Three cards - uneven light](https://i.imgur.com/UmMAgif.png)
 
 Detection fails mostly when the full card shape is somewhat occluded as you can see in the below example.
@@ -53,7 +54,7 @@ Future Work:
 ------------
 * Improve 4-point contour detection mechanism
 * Optimize the code speed for real-time video usage (remove unnecessary contour detection, use a faster Tesseract wrapper)
-
+* Dynamic text box size so it doesn't go over the edge of the image
 
 Related GitHub Projects:
 ------------
