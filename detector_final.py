@@ -76,7 +76,7 @@ if __name__ == "__main__":
             warped = four_point_transform(img_resized, c.reshape((4,2)))
             warped_w = warped.shape[0]
             warped_h = warped.shape[1]
-            print("Warped w: {}, Warped h: {}, ratio: {}, scaled ratio: {}".format(warped_w, warped_h, warped_h/warped_w, (warped_h*coef_y) / (warped_w*coef_x)))
+            #print("Warped w: {}, Warped h: {}, ratio: {}, scaled ratio: {}".format(warped_w, warped_h, warped_h/warped_w, (warped_h*coef_y) / (warped_w*coef_x)))
             if (1.15 < (warped_h*coef_y) / (warped_w*coef_x) < 1.4):
                 if args.visualize:
                     cv2.imshow("warped", warped)
