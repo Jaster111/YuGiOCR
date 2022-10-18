@@ -40,6 +40,8 @@ if __name__ == "__main__":
     #Resizing to 800x800
     ratio = img.shape[0] / 800.
     img_resized = cv2.resize(img, (800, 800))
+    coef_y = img.shape[0] / img_resized.shape[0]
+    coef_x = img.shape[1] / img_resized.shape[1]
     
     #grayscale -> bluring -> canny thresholding -> dilation
     gray_img = cv2.cvtColor(img_resized, cv2.COLOR_BGR2GRAY)
@@ -74,38 +76,37 @@ if __name__ == "__main__":
             warped = four_point_transform(img_resized, c.reshape((4,2)))
             warped_w = warped.shape[0]
             warped_h = warped.shape[1]
+            print("Warped w: {}, Warped h: {}, ratio: {}, scaled ratio: {}".format(warped_w, warped_h, warped_h/warped_w, (warped_h*coef_y) / (warped_w*coef_x)))
+            if (1.15 < (warped_h*coef_y) / (warped_w*coef_x) < 1.4):
+                if args.visualize:
+                    cv2.imshow("warped", warped)
+                    cv2.waitKey(0)
 
-            if args.visualize:
-                cv2.imshow("warped", warped)
-                cv2.waitKey(0)
+                #DETERMINE ANGLE FOR DESKEWING
+                angle = determine_skew(cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY))
 
-            #DETERMINE ANGLE FOR DESKEWING
-            angle = determine_skew(cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY))
+                if angle != 0 and angle is not None:
+                    warped = rotate(warped, angle, resize=True)
 
-            if angle != 0 and angle is not None:
-                warped = rotate(warped, angle, resize=True)
+                #CROP THE TEXT BOX APPROXIMATELLY AND GET THE TEXT
+                cropped = warped[int(warped.shape[1]//16):int(warped.shape[1]//7.7), int(warped.shape[0]*0.05):int(warped.shape[0]*0.73)]
+                text_roi = cv2.resize(cropped, (cropped.shape[1]*3,cropped.shape[0]*3))
 
-            #CROP THE TEXT BOX APPROXIMATELLY AND GET THE TEXT
-            cropped = warped[int(warped.shape[1]//16):int(warped.shape[1]//7.7), int(warped.shape[0]*0.05):int(warped.shape[0]*0.73)]
-            text_roi = cv2.resize(cropped, (cropped.shape[1]*3,cropped.shape[0]*3))
+                if args.visualize:
+                    cv2.imshow("extracted name", text_roi)
+                    cv2.waitKey(0)
 
-            if args.visualize:
-                cv2.imshow("extracted name", text_roi)
-                cv2.waitKey(0)
+                text_roi = Image.fromarray((text_roi * 255).astype(np.uint8))
 
-            text_roi = Image.fromarray((text_roi * 255).astype(np.uint8))
+                query = pytesseract.image_to_string(text_roi, config="--psm 7")
 
-            query = pytesseract.image_to_string(text_roi, config="--psm 7")
-
-            #IF TEXT HAS BEEN FOUND, MEMORIZE THE CONTOUR AND THE TEXT
-            if query:
-                new_contours.append([c, query])
+                #IF TEXT HAS BEEN FOUND, MEMORIZE THE CONTOUR AND THE TEXT
+                if query:
+                    new_contours.append([c, query])
             
 
 
     #RESIZING THE CONTOURS BACK TO THE ORIGINAL IMAGE SIZE
-    coef_y = img.shape[0] / img_resized.shape[0]
-    coef_x = img.shape[1] / img_resized.shape[1]
 
     #DRAWING THE BOUNDING BOXES AND CORRESPONDING TEXT
     for c, query in new_contours:
