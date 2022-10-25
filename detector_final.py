@@ -44,8 +44,9 @@ if __name__ == "__main__":
     coef_x = img.shape[1] / img_resized.shape[1]
     
     #grayscale -> bluring -> canny thresholding -> dilation
+
     gray_img = cv2.cvtColor(img_resized, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray_img, (11,11), 0)
+    blur = cv2.GaussianBlur(gray_img, (9,9), 0)
     thresh = cv2.Canny(blur, 50, 100)
     dilated = cv2.dilate(thresh, np.ones((11,11), dtype=np.int8))
 
@@ -90,7 +91,7 @@ if __name__ == "__main__":
 
                 #CROP THE TEXT BOX APPROXIMATELLY AND GET THE TEXT
                 cropped = warped[int(warped.shape[1]//16):int(warped.shape[1]//7.7), int(warped.shape[0]*0.05):int(warped.shape[0]*0.73)]
-                text_roi = cv2.resize(cropped, (cropped.shape[1]*3,cropped.shape[0]*3))
+                text_roi = cv2.resize(cropped, (800,70))
 
                 if args.visualize:
                     cv2.imshow("extracted name", text_roi)
